@@ -111,6 +111,8 @@ An array of coupon objects, each with:
 
 * **OpenCart Demo Store**: [https://demo.opencart.com/](https://demo.opencart.com/)
 * **Assignment Template**: [https://github.com/nyp-dime/webapi-assignment1](https://github.com/nyp-dime/webapi-assignment1)
+* **Saleor GraphQL Demo Store**: [https://demo.saleor.io/](https://demo.saleor.io/)
+
 
 ```
 ```
