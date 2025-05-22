@@ -6,6 +6,7 @@ var products = [
   { id: 4, name: 'ThinkPad',   price: 900,  stock: 4,  categoryId: 1 },
   { id: 5, name: 'Pixel 5',    price: 700,  stock: 6,  categoryId: 3 }
 ];
+
 // Array for storing coupons
 var coupons = [
   { code: 'WELCOME10', discountPct: 10, expires: '2025-12-31' },
@@ -28,14 +29,12 @@ function listProducts(categoryId) {
 
 // function for returning details for a single product by ID
 function getProductDetails(productId) {
-  var result = null;
   for (var i = 0; i < products.length; i++) {
     if (products[i].id === productId) {
-      result = products[i];
-      break;
+      return products[i];
     }
   }
-  return result;
+  return null;
 }
 
 // function for adding a quantity of a product to the cart object
@@ -73,50 +72,42 @@ function removeFromCart(cart, productId) {
   return cart;
 }
 
-//function for calculating the total price after applying any valid coupon
+// function for appling a coupon code to the cart if valid and not expired
+function applyCoupon(cart, couponCode) {
+  for (var i = 0; i < coupons.length; i++) {
+    var c = coupons[i];
+    if (c.code === couponCode) {
+      if (new Date(c.expires) < new Date()) {
+        throw new Error('Coupon expired');
+      }
+      cart.coupon = couponCode;
+      return cart;
+    }
+  }
+  throw new Error('Invalid coupon code');
+}
+
+// function for calculating the total price after applying any valid coupon
 function calculateCartTotal(cart) {
   var total = 0;
-  // Sum price * qty
   for (var i = 0; i < cart.items.length; i++) {
     var item = cart.items[i];
     var prod = getProductDetails(item.productId);
     total += prod.price * item.qty;
   }
-  // Apply coupon
   if (cart.coupon) {
-    var applied = null;
     for (var j = 0; j < coupons.length; j++) {
-      if (coupons[j].code === cart.coupon &&
-          new Date(coupons[j].expires) >= new Date()) {
-        applied = coupons[j];
+      var c = coupons[j];
+      if (c.code === cart.coupon && new Date(c.expires) >= new Date()) {
+        total = total * (1 - c.discountPct / 100);
         break;
       }
-    }
-    if (applied) {
-      total = total * (1 - applied.discountPct / 100);
     }
   }
   return parseFloat(total.toFixed(2));
 }
 
-// function for appling a coupon code to the cart if valid and not expired
-function applyCoupon(cart, couponCode) {
-  var found = null;
-  for (var i = 0; i < coupons.length; i++) {
-    if (coupons[i].code === couponCode) {
-      found = coupons[i];
-      break;
-    }
-  }
-  if (!found) {
-    throw new Error('Invalid coupon code');
-  }
-  if (new Date(found.expires) < new Date()) {
-    throw new Error('Coupon expired');
-  }
-  cart.coupon = couponCode;
-  return cart;
-}
+
 
 // function for placing the order: simulate payment, decrement stock, clear the cart
 function checkout(cart, paymentInfo) {
@@ -124,22 +115,24 @@ function checkout(cart, paymentInfo) {
     throw new Error('Cart is empty');
   }
   var orderId = 'ORD' + Date.now();
-  for (var i = 0; i < cart.items.length; i++) {
-    var prod = getProductDetails(cart.items[i].productId);
-    prod.stock -= cart.items[i].qty;
-  }
-  cart.items = [];
+  cart.items.forEach(function(item) {
+    var prod = getProductDetails(item.productId);
+    prod.stock = prod.stock - item.qty;
+  });
+  cart.items  = [];
   cart.coupon = null;
   return orderId;
 }
 
 // Export the module at the end of the file
 module.exports = {
-  listProducts: listProducts,
-  getProductDetails: getProductDetails,
-  addToCart: addToCart,
-  removeFromCart: removeFromCart,
-  calculateCartTotal: calculateCartTotal,
-  applyCoupon: applyCoupon,
-  checkout: checkout
+  listProducts,
+  getProductDetails,
+  addToCart,
+  removeFromCart,
+  calculateCartTotal,
+  applyCoupon,
+  checkout
 };
+
+
