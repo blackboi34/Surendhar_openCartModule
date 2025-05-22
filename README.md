@@ -1,17 +1,18 @@
 ````markdown
 # Surendhar_openCartModule
 
-Surendhar_openCartModule is a minimal Node.js library that simulates a simple e-commerce backend:  
-- A product catalog you can browse or filter by category  
-- Shopping cart operations (add/remove items)  
-- Coupon validation and discount calculation  
-- Checkout simulation with stock updates and order ID generation  
+Surendhar_openCartModule is a minimal Node.js library that simulates a simple e-commerce backend:
+
+- **Product catalog** you can browse or filter by category  
+- **Shopping cart** operations (add/remove items)  
+- **Coupon** validation and discount calculation  
+- **Checkout** simulation with stock updates and order ID generation  
 
 ---
 
 ## Prerequisites
 
-- **Node.js** v12 or newer
+- [Node.js](https://nodejs.org/) v12 or newer
 
 ---
 
@@ -22,37 +23,41 @@ git clone https://github.com/your-username/Surendhar_openCartModule.git
 cd Surendhar_openCartModule
 ````
 
-*No additional dependencies are required.*
+*No external dependencies required.*
 
 ---
 
 ## Quick Start
 
-1. **Create** an `app.js` (or `index.js`) in the project root:
+1. **Create** a file named `app.js` in the project root:
 
    ```js
+   // app.js
+   console.log('--- Starting Shopping Cart Demo ---');
+
    const cartModule = require('./Surendhar_openCartModule.js');
 
    // Initialize an empty cart
    let cart = { items: [], coupon: null };
-   ```
+   console.log('Initial cart:', cart);
 
-2. **Use** the API:
+   console.log('\n1) listProducts(null)');
+   const products = cartModule.listProducts(null);
+   console.log('Products:', products);
 
-   ```js
-   // 1) List all products
-   console.log('Products:', cartModule.listProducts(null));
-
-   // 2) Add 2× MacBook (id: 1)
+   console.log('\n2) addToCart(cart, 1, 2)');
    cart = cartModule.addToCart(cart, 1, 2);
+   console.log('Cart after adding:', cart);
 
-   // 3) Apply a coupon
+   console.log('\n3) applyCoupon(cart, "WELCOME10")');
    cart = cartModule.applyCoupon(cart, 'WELCOME10');
+   console.log('Cart after applying coupon:', cart);
 
-   // 4) Calculate total price
-   console.log('Total price:', cartModule.calculateCartTotal(cart));
+   console.log('\n4) calculateCartTotal(cart)');
+   const total = cartModule.calculateCartTotal(cart);
+   console.log('Total price:', total);
 
-   // 5) Checkout (returns an order ID and clears the cart)
+   console.log('\n5) checkout(cart, paymentInfo)');
    const orderId = cartModule.checkout(cart, {
      cardNumber: '4111111111111111',
      expiry:     '12/25',
@@ -60,15 +65,20 @@ cd Surendhar_openCartModule
    });
    console.log('Order placed, ID:', orderId);
 
-   // 6) Check updated stock for product #1
-   console.log('Product #1 now:', cartModule.getProductDetails(1));
+   console.log('\n6) getProductDetails(1)');
+   const updatedProduct = cartModule.getProductDetails(1);
+   console.log('Product #1 now:', updatedProduct);
+
+   console.log('\n--- Demo Complete ---');
    ```
 
-3. **Run** your application:
+2. **Run** the demo:
 
    ```bash
    node app.js
    ```
+
+You’ll see step-by-step logs showing products listed, items added, coupon applied, total calculated, checkout performed, and stock updated.
 
 ---
 
