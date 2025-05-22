@@ -1,4 +1,4 @@
-
+// Array for storing product 
 var products = [
   { id: 1, name: 'MacBook',    price: 1000, stock: 5, categoryId: 1 },
   { id: 2, name: 'iPhone',     price: 800,  stock: 10, categoryId: 1 },
@@ -6,15 +6,13 @@ var products = [
   { id: 4, name: 'ThinkPad',   price: 900,  stock: 4,  categoryId: 1 },
   { id: 5, name: 'Pixel 5',    price: 700,  stock: 6,  categoryId: 3 }
 ];
-
+// Array for storing coupons
 var coupons = [
   { code: 'WELCOME10', discountPct: 10, expires: '2025-12-31' },
   { code: 'SPRING20',  discountPct: 20, expires: '2025-06-30' }
 ];
 
-/**
- * Return all products, or filter by categoryId if provided
- */
+// function for returning all products, or filter by categoryId if provided
 function listProducts(categoryId) {
   if (categoryId == null) {
     return products;
@@ -28,9 +26,7 @@ function listProducts(categoryId) {
   return result;
 }
 
-/**
- * Return details for a single product by ID
- */
+// function for returning details for a single product by ID
 function getProductDetails(productId) {
   var result = null;
   for (var i = 0; i < products.length; i++) {
@@ -42,9 +38,7 @@ function getProductDetails(productId) {
   return result;
 }
 
-/**
- * Add a quantity of a product to the cart object
- */
+// function for adding a quantity of a product to the cart object
 function addToCart(cart, productId, qty) {
   var product = getProductDetails(productId);
   if (!product) {
@@ -67,9 +61,7 @@ function addToCart(cart, productId, qty) {
   return cart;
 }
 
-/**
- * Remove a product entirely from the cart
- */
+// function for removing a product entirely from the cart
 function removeFromCart(cart, productId) {
   var newItems = [];
   for (var i = 0; i < cart.items.length; i++) {
@@ -81,9 +73,7 @@ function removeFromCart(cart, productId) {
   return cart;
 }
 
-/**
- * Calculate the total price after applying any valid coupon
- */
+//function for calculating the total price after applying any valid coupon
 function calculateCartTotal(cart) {
   var total = 0;
   // Sum price * qty
@@ -109,9 +99,7 @@ function calculateCartTotal(cart) {
   return parseFloat(total.toFixed(2));
 }
 
-/**
- * Apply a coupon code to the cart
- */
+// function for appling a coupon code to the cart if valid and not expired
 function applyCoupon(cart, couponCode) {
   var found = null;
   for (var i = 0; i < coupons.length; i++) {
@@ -130,9 +118,7 @@ function applyCoupon(cart, couponCode) {
   return cart;
 }
 
-/**
- * Place the order: simulate payment, decrement stock, clear the cart
- */
+// function for placing the order: simulate payment, decrement stock, clear the cart
 function checkout(cart, paymentInfo) {
   if (cart.items.length === 0) {
     throw new Error('Cart is empty');
@@ -149,7 +135,6 @@ function checkout(cart, paymentInfo) {
 
 // Export the module at the end of the file
 module.exports = {
-  description: "Simple in-memory OpenCart demo module",
   listProducts: listProducts,
   getProductDetails: getProductDetails,
   addToCart: addToCart,
