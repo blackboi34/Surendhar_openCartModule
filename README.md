@@ -82,7 +82,7 @@ You’ll see step-by-step logs showing products listed, items added, coupon appl
 
 ---
 
-## API Reference
+## Functions
 
 ### `listProducts(categoryId)`
 
